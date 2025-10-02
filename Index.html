@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e40af">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Ultimate CEO Command Center - Manage all your businesses in one powerful app">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNFTyBDb21tYW5kIENlbnRlciIsCiAgInNob3J0X25hbWUiOiAiQ0VPIEhRIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTQwYWYiLAogICJ0aGVtZV9jb2xvciI6ICIjMWU0MGFmIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxOTInIGhlaWdodD0nMTkyJyUzRSUzQ3JlY3Qgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInIGZpbGw9JyUyMzFlNDBhZicvJTNFJTNDdGV4dCB4PSc1MCUyNScgeT0nNTAlMjUnIGZvbnQtc2l6ZT0nMTAwJyBmb250LWZhbWlseT0nQXJpYWwnIGZpbGw9JyUyM2ZmZicgdGV4dC1hbmNob3I9J21pZGRsZScgZHk9Jy4zZW0nJTNFJUYwJTlGJThGJUEyJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInJTNFJTNDcmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgZmlsbD0nJTIzMWU0MGFmJy8lM0UlM0N0ZXh0IHg9JzUwJTI1JyB5PSc1MCUyNScgZm9udC1zaXplPScyNTAnIGZvbnQtZmFtaWx5PSdBcmlhbCcgZmlsbD0nJTIzZmZmJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkeT0nLjNlbSclM0UlRjAlOUYlOEYlQTIlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' fill='%231e40af'/%3E%3Ctext x='50%25' y='50%25' font-size='100' font-family='Arial' fill='%23fff' text-anchor='middle' dy='.3em'%3E🏢%3C/text%3E%3C/svg%3E">
+    <title>CEO Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; overflow-x: hidden; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; overflow-y: auto; }
+        .modal.active { display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; border-radius: 16px; padding: 24px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        textarea { resize: vertical; min-height: 80px; }
+        @media (max-width: 768px) { .desktop-sidebar { display: none; } }
+        .install-prompt { position: fixed; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 1000; display: none; }
+        .install-prompt.show { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div id="installPrompt" class="install-prompt">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex-1">
+                <p class="font-bold mb-1">📱 Install CEO Command Center</p>
+                <p class="text-sm text-white/90">Add to your home screen for the best experience!</p>
+            </div>
+            <button onclick="installApp()" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-bold whitespace-nowrap">Install</button>
+            <button onclick="dismissInstall()" class="text-white/80 hover:text-white">✕</button>
+        </div>
+    </div>
+
+    <div id="app"></div>
+
+    <!-- All Modals (same as before) -->
+    <div id="businessPlanModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">📋 Business Plan Editor</h2>
+            <div class="space-y-4">
+                <input type="text" id="planBizName" placeholder="Business Name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                <textarea id="planSummary" placeholder="Executive Summary" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="4"></textarea>
+                <textarea id="planMission" placeholder="Mission Statement" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <textarea id="planVision" placeholder="Vision Statement" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <textarea id="planMarket" placeholder="Target Market" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <textarea id="planRevenue" placeholder="Revenue Model" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <textarea id="planGoals" placeholder="5-Year Goals" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="4"></textarea>
+                <div class="flex gap-3">
+                    <button onclick="savePlan()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700">💾 Save Plan</button>
+                    <button onclick="closeModal('businessPlanModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold hover:bg-gray-300">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="teamModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">👥 Add Team Member</h2>
+            <div class="space-y-3">
+                <input type="text" id="teamName" placeholder="Full Name *" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <input type="text" id="teamRole" placeholder="Position/Role *" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <input type="email" id="teamEmail" placeholder="Email" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <input type="tel" id="teamPhone" placeholder="Phone" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <select id="teamDept" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                    <option value="">Select Department</option>
+                    <option value="Executive">Executive</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                    <option value="HR">Human Resources</option>
+                    <option value="IT">IT/Technology</option>
+                </select>
+                <div class="flex gap-3">
+                    <button onclick="saveTeam()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold">Add Member</button>
+                    <button onclick="closeModal('teamModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="campaignModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">📢 Create Marketing Campaign</h2>
+            <div class="space-y-3">
+                <input type="text" id="campName" placeholder="Campaign Name *" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <textarea id="campDesc" placeholder="Campaign Description" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <select id="campType" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                    <option value="">Campaign Type</option>
+                    <option value="Email Marketing">Email Marketing</option>
+                    <option value="Social Media">Social Media</option>
+                    <option value="Content Marketing">Content Marketing</option>
+                    <option value="PPC Advertising">PPC Advertising</option>
+                </select>
+                <input type="text" id="campBudget" placeholder="Budget (e.g. $10,000)" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <div class="flex gap-3">
+                    <button onclick="saveCampaign()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold">Launch Campaign</button>
+                    <button onclick="closeModal('campaignModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="budgetModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">💰 Budget Entry</h2>
+            <div class="space-y-3">
+                <input type="text" id="budgetCategory" placeholder="Category" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <input type="number" id="budgetAmount" placeholder="Amount" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <select id="budgetType" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                    <option value="Expense">Expense</option>
+                    <option value="Income">Income</option>
+                </select>
+                <div class="flex gap-3">
+                    <button onclick="saveBudget()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold">Save Entry</button>
+                    <button onclick="closeModal('budgetModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="competitorModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">🎯 Competitor Analysis</h2>
+            <div class="space-y-3">
+                <input type="text" id="compName" placeholder="Competitor Name *" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <input type="url" id="compWebsite" placeholder="Website URL" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <textarea id="compStrengths" placeholder="Their Strengths" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <textarea id="compWeaknesses" placeholder="Their Weaknesses" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none" rows="3"></textarea>
+                <div class="flex gap-3">
+                    <button onclick="saveCompetitor()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold">Save Analysis</button>
+                    <button onclick="closeModal('competitorModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="researchModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">📊 Market Research</h2>
+            <div class="space-y-3">
+                <input type="text" id="researchTitle" placeholder="Research Title *" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                <select id="researchType" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none">
+                    <option value="">Research Type</option>
+                    <option value="Market Size">Market Size Analysis</option>
+                    <option value="Customer Survey">Customer Survey</option>
+                    <option value="Trend Analysis">Trend Analysis</option>
+                    <option value="SWOT Analysis">SWOT Analysis</option>
+                </select>
+                <textarea id="researchFindings" placeholder="Key Findings" class="w-full px-4 py-3 border-2 rounded-lg focus:border-blue-500 focus:outline-none" rows="4"></textarea>
+                <div class="flex gap-3">
+                    <button onclick="saveResearch()" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold">Save Research</button>
+                    <button onclick="closeModal('researchModal')" class="flex-1 bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PWA Installation
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('App installed');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').classList.remove('show');
+                });
+            }
+        }
+
+        function dismissInstall() {
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+
+        // Data Storage
+        let data = JSON.parse(localStorage.getItem('ceoAppData')) || {
+            businesses: [{ id: 1, name: 'My First Business', type: 'Technology', revenue: '$1M', employees: 10, outlets: 1 }],
+            businessPlans: [],
+            team: [],
+            campaigns: [],
+            budget: [],
+            competitors: [],
+            research: []
+        };
+
+        let state = { selectedBusiness: 1, activeModule: 'dashboard', menuOpen: false };
+
+        function saveData() {
+            localStorage.setItem('ceoAppData', JSON.stringify(data));
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function savePlan() {
+            data.businessPlans.push({
+                id: Date.now(),
+                businessId: state.selectedBusiness,
+                businessName: document.getElementById('planBizName').value,
+                summary: document.getElementById('planSummary').value,
+                mission: document.getElementById('planMission').value,
+                vision: document.getElementById('planVision').value,
+                market: document.getElementById('planMarket').value,
+                revenue: document.getElementById('planRevenue').value,
+                goals: document.getElementById('planGoals').value,
+                created: new Date().toISOString()
+            });
+            saveData();
+            closeModal('businessPlanModal');
+            clearInputs(['planBizName','planSummary','planMission','planVision','planMarket','planRevenue','planGoals']);
+            render();
+        }
+
+        function saveTeam() {
+            const name = document.getElementById('teamName').value;
+            if (!name) return alert('Please enter team member name');
+            data.team.push({
+                id: Date.now(),
+                name: name,
+                role: document.getElementById('teamRole').value,
+                email: document.getElementById('teamEmail').value,
+                phone: document.getElementById('teamPhone').value,
+                department: document.getElementById('teamDept').value,
+                businessId: state.selectedBusiness
+            });
+            saveData();
+            closeModal('teamModal');
+            clearInputs(['teamName','teamRole','teamEmail','teamPhone','teamDept']);
+            render();
+        }
+
+        function saveCampaign() {
+            const name = document.getElementById('campName').value;
+            if (!name) return alert('Please enter campaign name');
+            data.campaigns.push({
+                id: Date.now(),
+                name: name,
+                description: document.getElementById('campDesc').value,
+                type: document.getElementById('campType').value,
+                budget: document.getElementById('campBudget').value,
+                status: 'Active',
+                businessId: state.selectedBusiness
+            });
+            saveData();
+            closeModal('campaignModal');
+            clearInputs(['campName','campDesc','campType','campBudget']);
+            render();
+        }
+
+        function saveBudget() {
+            data.budget.push({
+                id: Date.now(),
+                category: document.getElementById('budgetCategory').value,
+                amount: parseFloat(document.getElementById('budgetAmount').value) || 0,
+                type: document.getElementById('budgetType').value,
+                businessId: state.selectedBusiness
+            });
+            saveData();
+            closeModal('budgetModal');
+            clearInputs(['budgetCategory','budgetAmount']);
+            render();
+        }
+
+        function saveCompetitor() {
+            const name = document.getElementById('compName').value;
+            if (!name) return alert('Please enter competitor name');
+            data.competitors.push({
+                id: Date.now(),
+                name: name,
+                website: document.getElementById('compWebsite').value,
+                strengths: document.getElementById('compStrengths').value,
+                weaknesses: document.getElementById('compWeaknesses').value,
+                businessId: state.selectedBusiness
+            });
+            saveData();
+            closeModal('competitorModal');
+            clearInputs(['compName','compWebsite','compStrengths','compWeaknesses']);
+            render();
+        }
+
+        function saveResearch() {
+            const title = document.getElementById('researchTitle').value;
+            if (!title) return alert('Please enter research title');
+            data.research.push({
+                id: Date.now(),
+                title: title,
+                type: document.getElementById('researchType').value,
+                findings: document.getElementById('researchFindings').value,
+                businessId: state.selectedBusiness
+            });
+            saveData();
+            closeModal('researchModal');
+            clearInputs(['researchTitle','researchType','researchFindings']);
+            render();
+        }
+
+        function clearInputs(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function deleteItem(collection, id) {
+            if (confirm('Delete this item?')) {
+                data[collection] = data[collection].filter(item => item.id !== id);
+                saveData();
+                render();
+            }
+        }
+
+        function toggleMenu() {
+            state.menuOpen = !state.menuOpen;
+            render();
+        }
+
+        function renderMobileNav() {
+            const modules = [
+                { id: 'dashboard', name: 'Dashboard', icon: '🏠' },
+                { id: 'businessplan', name: 'Business Plans', icon: '📋' },
+                { id: 'team', name: 'Team', icon: '👥' },
+                { id: 'campaigns', name: 'Marketing', icon: '📢' },
+                { id: 'budget', name: 'Budget', icon: '💰' },
+                { id: 'competitors', name: 'Competitors', icon: '🎯' },
+                { id: 'research', name: 'Research', icon: '📊' }
+            ];
+
+            return `
+                <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg z-50">
+                    <div class="flex items-center justify-between p-4">
+                        <button onclick="toggleMenu()" class="text-2xl">☰</button>
+                        <h1 class="text-xl font-bold">🏢 CEO HQ</h1>
+                        <div class="w-8"></div>
+                    </div>
+                </div>
+
+                ${state.menuOpen ? `
+                    <div class="fixed inset-0 bg-black/50 z-40" onclick="toggleMenu()"></div>
+                    <div class="fixed top-0 left-0 bottom-0 w-80 bg-white shadow-2xl z-50 overflow-y-auto">
+                        <div class="p-6 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                            <button onclick="toggleMenu()" class="text-2xl mb-4">✕</button>
+                            <h2 class="text-2xl font-bold mb-2">CEO Command Center</h2>
+                            <select id="mobileBizSelector" class="w-full px-3 py-2 bg-white/20 rounded-lg text-white mt-4">
+                                ${data.businesses.map(b => `<option value="${b.id}" ${b.id == state.selectedBusiness ? 'selected' : ''}>${b.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <nav class="p-4">
+                            ${modules.map(m => `
+                                <button onclick="state.activeModule='${m.id}';toggleMenu();render()" class="w-full text-left px-4 py-4 rounded-lg mb-2 ${state.activeModule === m.id ? 'bg-blue-50 text-blue-600 font-semibold' : 'hover:bg-gray-50'} flex items-center gap-3 border-b">
+                                    <span class="text-2xl">${m.icon}</span>
+                                    <span>${m.name}</span>
+                                </button>
+                            `).join('')}
+                        </nav>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function renderDashboard() {
+            const biz = data.businesses.find(b => b.id == state.selectedBusiness);
+            return `
+                <div class="p-4 md:p-6 space-y-4 mt-16">
+                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white shadow-xl">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-2">${biz.name}</h2>
+                        <p class="text-blue-100">${biz.type} • ${biz.employees} Employees</p>
+                        <div class="mt-4">
+                            <p class="text-blue-200 text-sm">Annual Revenue</p>
+                            <p class="text-3xl md:text-4xl font-bold">${biz.revenue}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 md:gap-4">
+                        <div class="bg-white rounded-xl p-4 shadow border-l-4 border-blue-500">
+                            <p class="text-xs text-gray-600">Team Members</p>
+                            <p class="text-2xl md:text-3xl font-bold mt-1">${data.team.length}</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow border-l-4 border-green-500">
+                            <p class="text-xs text-gray-600">Campaigns</p>
+                            <p class="text-2xl md:text-3xl font-bold mt-1">${data.campaigns.length}</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow border-l-4 border-purple-500">
+                            <p class="text-xs text-gray-600">Competitors</p>
+                            <p class="text-2xl md:text-3xl font-bold mt-1">${data.competitors.length}</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow border-l-4 border-orange-500">
+                            <p class="text-xs text-gray-600">Research</p>
+                            <p class="text-2xl md:text-3xl font-bold mt-1">${data.research.length}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-4 md:p-6 shadow">
+                        <h3 class="text-lg md:text-xl font-bold mb-4">📊 Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="openModal('businessPlanModal')" class="p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">📋</div>
+                                <div class="text-sm font-semibold">Business Plan</div>
+                            </button>
+                            <button onclick="openModal('teamModal')" class="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">👥</div>
+                                <div class="text-sm font-semibold">Add Team</div>
+                            </button>
+                            <button onclick="openModal('campaignModal')" class="p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">📢</div>
+                                <div class="text-sm font-semibold">Campaign</div>
+                            </button>
+                            <button onclick="openModal('budgetModal')" class="p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">💰</div>
+                                <div class="text-sm font-semibold">Budget</div>
+                            </button>
+                            <button onclick="openModal('competitorModal')" class="p-4 bg-red-50 rounded-xl hover:bg-red-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">🎯</div>
+                                <div class="text-sm font-semibold">Competitor</div>
+                            </button>
+                            <button onclick="openModal('researchModal')" class="p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition active:scale-95">
+                                <div class="text-3xl mb-2">📊</div>
+                                <div class="text-sm font-semibold">Research</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-5 border-2 border-green-200">
+                        <div class="flex items-start gap-3">
+                            <div class="text-3xl">💡</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-green-900 mb-1">AI Strategic Insight</h4>
+                                <p class="text-sm text-green-800">Your ${biz.type} sector is growing at 18%. Consider expanding marketing budget by 25% in Q3 to capture market share.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBusinessPlan() {
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">📋 Business Plans</h2>
+                        <button onclick="openModal('businessPlanModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ New</button>
+                    </div>
+
+                    ${data.businessPlans.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">📋</div>
+                            <h3 class="text-xl font-bold mb-2">No Business Plans Yet</h3>
+                            <p class="text-gray-600 mb-6">Create comprehensive plans with mission, vision, and goals.</p>
+                            <button onclick="openModal('businessPlanModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Create First Plan</button>
+                        </div>
+                    ` : `
+                        <div class="space-y-4">
+                            ${data.businessPlans.map(plan => `
+                                <div class="bg-white rounded-xl p-5 shadow border-l-4 border-blue-600">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="text-lg font-bold">${plan.businessName}</h3>
+                                            <p class="text-xs text-gray-500">${new Date(plan.created).toLocaleDateString()}</p>
+                                        </div>
+                                        <button onclick="deleteItem('businessPlans', ${plan.id})" class="text-red-600 text-sm">Delete</button>
+                                    </div>
+                                    ${plan.summary ? `<p class="text-sm text-gray-700 mb-2"><strong>Summary:</strong> ${plan.summary}</p>` : ''}
+                                    ${plan.mission ? `<p class="text-sm text-gray-700"><strong>Mission:</strong> ${plan.mission}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderTeam() {
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">👥 Team</h2>
+                        <button onclick="openModal('teamModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ Add</button>
+                    </div>
+
+                    ${data.team.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">👥</div>
+                            <h3 class="text-xl font-bold mb-2">Build Your Team</h3>
+                            <p class="text-gray-600 mb-6">Add team members and manage your organization.</p>
+                            <button onclick="openModal('teamModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Add First Member</button>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${data.team.map(member => `
+                                <div class="bg-white rounded-xl p-5 shadow hover:shadow-lg transition">
+                                    <div class="flex items-start justify-between mb-3">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                                            ${member.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <button onclick="deleteItem('team', ${member.id})" class="text-red-600 text-sm">Remove</button>
+                                    </div>
+                                    <h3 class="font-bold text-lg">${member.name}</h3>
+                                    <p class="text-blue-600 font-semibold text-sm mb-2">${member.role}</p>
+                                    <div class="text-sm text-gray-600 space-y-1">
+                                        ${member.email ? `<p>📧 ${member.email}</p>` : ''}
+                                        ${member.phone ? `<p>📞 ${member.phone}</p>` : ''}
+                                        ${member.department ? `<p>🏢 ${member.department}</p>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderCampaigns() {
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">📢 Campaigns</h2>
+                        <button onclick="openModal('campaignModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ Launch</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-white rounded-xl p-4 shadow">
+                            <p class="text-xs text-gray-600">Total</p>
+                            <p class="text-2xl font-bold text-blue-600">${data.campaigns.length}</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 shadow">
+                            <p class="text-xs text-gray-600">Active</p>
+                            <p class="text-2xl font-bold text-green-600">${data.campaigns.filter(c => c.status === 'Active').length}</p>
+                        </div>
+                    </div>
+
+                    ${data.campaigns.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">📢</div>
+                            <h3 class="text-xl font-bold mb-2">Launch Your First Campaign</h3>
+                            <p class="text-gray-600 mb-6">Create marketing campaigns and track performance.</p>
+                            <button onclick="openModal('campaignModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Create Campaign</button>
+                        </div>
+                    ` : `
+                        <div class="space-y-4">
+                            ${data.campaigns.map(camp => `
+                                <div class="bg-white rounded-xl p-5 shadow border-l-4 border-purple-600">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="flex-1">
+                                            <h3 class="font-bold text-lg">${camp.name}</h3>
+                                            <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold mt-1">${camp.status}</span>
+                                        </div>
+                                        <button onclick="deleteItem('campaigns', ${camp.id})" class="text-red-600 text-sm">Delete</button>
+                                    </div>
+                                    ${camp.description ? `<p class="text-sm text-gray-600 mb-2">${camp.description}</p>` : ''}
+                                    <div class="flex gap-4 text-sm">
+                                        ${camp.type ? `<span><strong>Type:</strong> ${camp.type}</span>` : ''}
+                                        ${camp.budget ? `<span class="text-green-600"><strong>${camp.budget}</strong></span>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderBudget() {
+            const totalIncome = data.budget.filter(b => b.type === 'Income').reduce((sum, b) => sum + b.amount, 0);
+            const totalExpense = data.budget.filter(b => b.type === 'Expense').reduce((sum, b) => sum + b.amount, 0);
+            const netProfit = totalIncome - totalExpense;
+
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">💰 Budget</h2>
+                        <button onclick="openModal('budgetModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ Add</button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow">
+                            <p class="text-green-100 text-xs">Income</p>
+                            <p class="text-xl font-bold">$${totalIncome.toLocaleString()}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow">
+                            <p class="text-red-100 text-xs">Expenses</p>
+                            <p class="text-xl font-bold">$${totalExpense.toLocaleString()}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow">
+                            <p class="text-blue-100 text-xs">Profit</p>
+                            <p class="text-xl font-bold">$${netProfit.toLocaleString()}</p>
+                        </div>
+                    </div>
+
+                    ${data.budget.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">💰</div>
+                            <h3 class="text-xl font-bold mb-2">Track Your Finances</h3>
+                            <p class="text-gray-600 mb-6">Monitor income and expenses.</p>
+                            <button onclick="openModal('budgetModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Add First Entry</button>
+                        </div>
+                    ` : `
+                        <div class="space-y-3">
+                            ${data.budget.map(item => `
+                                <div class="bg-white rounded-xl p-4 shadow flex justify-between items-center">
+                                    <div class="flex-1">
+                                        <p class="font-semibold">${item.category}</p>
+                                        <span class="inline-block px-2 py-1 rounded text-xs mt-1 ${item.type === 'Income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.type}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-lg ${item.type === 'Income' ? 'text-green-600' : 'text-red-600'}">${item.type === 'Income' ? '+' : '-'}$${item.amount.toLocaleString()}</p>
+                                        <button onclick="deleteItem('budget', ${item.id})" class="text-red-600 text-xs mt-1">Delete</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderCompetitors() {
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">🎯 Competitors</h2>
+                        <button onclick="openModal('competitorModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ Add</button>
+                    </div>
+
+                    ${data.competitors.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <h3 class="text-xl font-bold mb-2">Analyze Competitors</h3>
+                            <p class="text-gray-600 mb-6">Track competitor strengths and weaknesses.</p>
+                            <button onclick="openModal('competitorModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Add First Competitor</button>
+                        </div>
+                    ` : `
+                        <div class="space-y-4">
+                            ${data.competitors.map(comp => `
+                                <div class="bg-white rounded-xl p-5 shadow border-l-4 border-red-600">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="font-bold text-lg">${comp.name}</h3>
+                                            ${comp.website ? `<a href="${comp.website}" target="_blank" class="text-sm text-blue-600">${comp.website}</a>` : ''}
+                                        </div>
+                                        <button onclick="deleteItem('competitors', ${comp.id})" class="text-red-600 text-sm">Delete</button>
+                                    </div>
+                                    ${comp.strengths ? `<p class="text-sm mb-2"><strong class="text-green-600">Strengths:</strong> ${comp.strengths}</p>` : ''}
+                                    ${comp.weaknesses ? `<p class="text-sm"><strong class="text-red-600">Weaknesses:</strong> ${comp.weaknesses}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderResearch() {
+            return `
+                <div class="p-4 md:p-6 mt-16">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">📊 Research</h2>
+                        <button onclick="openModal('researchModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm active:scale-95">+ Add</button>
+                    </div>
+
+                    ${data.research.length === 0 ? `
+                        <div class="bg-white rounded-xl p-8 text-center shadow">
+                            <div class="text-6xl mb-4">📊</div>
+                            <h3 class="text-xl font-bold mb-2">Market Research</h3>
+                            <p class="text-gray-600 mb-6">Document market insights and analysis.</p>
+                            <button onclick="openModal('researchModal')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Add Research</button>
+                        </div>
+                    ` : `
+                        <div class="space-y-4">
+                            ${data.research.map(res => `
+                                <div class="bg-white rounded-xl p-5 shadow border-l-4 border-indigo-600">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="font-bold text-lg">${res.title}</h3>
+                                            ${res.type ? `<span class="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs mt-1">${res.type}</span>` : ''}
+                                        </div>
+                                        <button onclick="deleteItem('research', ${res.id})" class="text-red-600 text-sm">Delete</button>
+                                    </div>
+                                    ${res.findings ? `<p class="text-sm text-gray-700"><strong>Findings:</strong> ${res.findings}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderContent() {
+            switch(state.activeModule) {
+                case 'dashboard': return renderDashboard();
+                case 'businessplan': return renderBusinessPlan();
+                case 'team': return renderTeam();
+                case 'campaigns': return renderCampaigns();
+                case 'budget': return renderBudget();
+                case 'competitors': return renderCompetitors();
+                case 'research': return renderResearch();
+                default: return renderDashboard();
+            }
+        }
+
+        function render() {
+            document.getElementById('app').innerHTML = `
+                ${renderMobileNav()}
+                ${renderContent()}
+            `;
+
+            const mobileBizSelector = document.getElementById('mobileBizSelector');
+            if (mobileBizSelector) {
+                mobileBizSelector.onchange = (e) => { 
+                    state.selectedBusiness = parseInt(e.target.value); 
+                    render(); 
+                };
+            }
+        }
+
+        // Initial render
+        render();
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,self.addEventListener("install",e=>{self.skipWaiting()}),self.addEventListener("activate",e=>{self.clients.claim()}),self.addEventListener("fetch",e=>{e.respondWith(fetch(e.request))})');
+        }
+    </script>
+</body>
+</html>
